@@ -108,44 +108,84 @@ def timeNewsCorr(newsData, stockDatApple, stockDatAmazon):
     apple_date = []
     apple_totalDataStart = []
     apple_totalDataEnd = []
+    apple_delta = []
     appleReader = csv.reader(appleData)
     for line in appleReader:
         apple_date.append(line[0])
         apple_totalDataStart.append(line[2])
         apple_totalDataEnd.append(line[5])
+        apple_delta.append(line[7])
     # print("Apple: " ,apple_totalDataStart[0] ,"\n", apple_totalDataStart[0], "\n", apple_totalDataEnd[0],"\n" , apple_date[0])
     
     amazon_date = []
     amazon_time = []
     amazon_totalDataStart = []
     amazon_totalDataEnd = []
+    amazon_delta = []
     amazonReader = csv.reader(amazonData)
     for line in amazonReader:
         amazon_date.append(line[0])
         amazon_time.append(line[1])
         amazon_totalDataStart.append(line[2])
         amazon_totalDataEnd.append(line[5])
+        amazon_delta.append(line[7])
     # print("Amazon: ", amazon_totalDataStart[0] ,"\n", amazon_totalDataStart[0], "\n", amazon_totalDataEnd[0],"\n" , amazon_date [0], "\n" , amazon_time[0])
 
-    counter = 0
-    
-    for row in news_totalData:
-        # print(row )
-        counter2 = 0  
-        # print(row)  
+    start_Time = datetime.strptime("12:30", "%H:%M")
+    end_Time = datetime.strptime("21:30", "%H:%M")
+    # print(start_Time, " ", end_Time)
+    amazon_delta_complete = []
+    apple_delta_complete = []
+    flag = 0
+    for counter, row in enumerate(news_totalData):
+        flag = 0
         news_date_var = datetime.strptime(row, "%Y-%m-%d %H:%M:%S")
-        print("news date:",news_date_var)
-        for row2 in amazon_date:
-            first = datetime.strptime(amazon_date[counter]+ "," + amazon_time[counter], "%Y.%m.%d,%H:%M")
-            # 2018-01-01 12:0:0->  2018-01-01 13:0:0  12:30-20:20
-            # if >=12:30 <=20:20 
-            # if compare indx new with indx amz
-            if (news_date_var >= first): 
-                print("Found date: " ,row , "||", first )
+        # print("news date:",news_date_var)
+        for counter2, row2 in enumerate(amazon_date):
+            first_amazon = datetime.strptime(row2+ "," + amazon_time[counter2], "%Y.%m.%d,%H:%M")
+            # print(news_date_var , " ", first.date())
+            if (news_date_var.date() == first_amazon.date()): 
+                # if it is in 13:30-21:30
+                if(news_date_var.time() >= start_Time.time() and news_date_var.time() < end_Time.time()):
+                    news_date_var2 = news_date_var + timedelta(hours=1)
+                    if(news_date_var.time() <= first_amazon.time() and news_date_var2.time() > first_amazon.time()):
+                        amazon_delta_complete.append(amazon_delta[counter2])
+                        # print("found exact hr:" , first_amazon.time() , "||" ,news_date_var )
+                        # print(amazon_delta[counter2], "counter:" , counter, "||", counter2)
+                        flag = 1
+                # this accounts for not in 13:30-21:30 so +1 day 1st hr
+                else:
+                    temp = news_date_var + timedelta(days=1)
+                    # temp2 = temp.strptime(temp+"12:30" , "%Y:%M:%d %H:%M")
+                    temp2 = temp.replace(hour=13, minute=30)
+                    temp3 = temp2.strptime(row, "%Y-%m-%d %H:%M:%S")
+                    for counter3, row3 in enumerate(amazon_date):
+                        first_amazon2 = datetime.strptime(row3+ "," + amazon_time[counter3], "%Y.%m.%d,%H:%M")
+                        # print("hey:" , first_amazon2 , "||", temp2)
+                        # if(temp2.date() == first_amazon2.date() and temp2.time() == first_amazon2.time()):
+                        if(temp2 == first_amazon2 and flag != 1):
+                            amazon_delta_complete.append(amazon_delta[counter3])
+                            print("Found 2 ", news_date_var, "||+1 day", temp2, "||amazon: " , first_amazon2)
+                            print(amazon_delta[counter3], "counter", counter , "||", counter3)
+                            flag = 1
+                            
+        # this accounts for holidays/if not in amazon do +1 day and 13:30 and give that 
+        if (flag == 0):
+            temp3 = news_date_var + timedelta(days=1)
+            temp4 = temp3.replace(hour=13, minute=30)
+            # print("holiday:", news_date_var, "||", temp4)
+            for counter4, row4 in enumerate(amazon_date):
+                    first_amazon3 = datetime.strptime(row4 + "," + amazon_time[counter4], "%Y.%m.%d,%H:%M")
+                    # print("hey:" , first_amazon3 , "||", temp4)
+                    if(temp4.date() == first_amazon3.date()):
+                        # print("time", temp2.time(), first_amazon2.time())
+                        if(temp4.time() == first_amazon3.time()):
+                            amazon_delta_complete.append(amazon_delta[counter4])
+                            # print("Found 3 ", news_date_var, "||+1 day", temp4, "||amazon: " , first_amazon3)
+                            # print(amazon_delta[counter4], "counter", counter , "||", counter4)            
 
-            counter2 +=1
-        # print(amazon_date[counter] + " " + amazon_time[counter])
-        counter+=1
+    # print(amazon_delta_complete[67])
+     
 
 # folder_path = '/Users/matthewbao/Desktop/study/CSE573/News/2018_01_d157b48c57be246ec7dd80e7af4388a2'
 txt_filename = r'C:\Users\babuvgiridar\OneDrive - Arizona State University\Asu\Year\Master\Spring 2020\Cse 573\Project\Project_preprocess\test.txt'
