@@ -1,5 +1,7 @@
 import csv
 import pymysql
+#SET @@global.sql_mode= '';
+
 
 # defined init database
 def init():
@@ -21,7 +23,7 @@ def insert_news(title, site, date, text):
     
     with con:
         cur.execute('CREATE TABLE IF NOT EXISTS News(Id INT PRIMARY KEY AUTO_INCREMENT, Title varchar(150), Site char('
-                    '50), Date datetime, Text varchar(500))')
+                    '50), Date datetime, Text varchar(5000))')
         cur.execute('INSERT INTO News(Title, Site, Date, Text) VALUES(%s, %s, %s, %s)', (title, site, date, text))
 
     con.commit()

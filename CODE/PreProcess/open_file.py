@@ -5,7 +5,8 @@ import string
 import create_sql
 import csv
 import sys
-
+import pandas as pd
+from featureExtration import featureExtration, featureExtration4, getAllSite2
 
 import numpy as np
 from nltk import word_tokenize, PorterStemmer
@@ -42,10 +43,6 @@ def preprocess_data(text):
     while('' in result1 ):
         result1.remove('')
 
-    # print(result1)
-    
-    #result = ','.join(sentence)
-    
     result1 = ','.join(result1)
     # print(result1)
     return result1
@@ -68,9 +65,9 @@ def write_file(filepath):
     my_files = []
     my_files2 = []
     counter_files = 0
-    # rootdir = basepath + '/Data/News/2018_01_d157b48c57be246ec7dd80e7af4388a2'
+    rootdir = basepath + '/Data/News/2018_01_d157b48c57be246ec7dd80e7af4388a2'
     # rootdir = basepath + '/Data/Sample_test'
-    rootdir = basepath + '/Data/News/'
+    # rootdir = basepath + '/Data/News/'
 
     for subdirectory, dirs, files in os.walk(rootdir):
         for file in files:
@@ -155,8 +152,8 @@ def timeNewsCorr(newsData, stockDatAmazon):
                     news_date_var2 = news_date_var + timedelta(hours=1)
                     if news_date_var.time() <= first_amazon.time() < news_date_var2.time():
                         amazon_delta_complete.append(amazon_delta[counter2])
-                        print("found exact hr:", first_amazon.time(), "||", news_date_var,
-                              "label:", amazon_delta[counter2], "counter:", counter, "||", counter2)
+                        # print("found exact hr:", first_amazon.time(), "||", news_date_var,
+                        #       "label:", amazon_delta[counter2], "counter:", counter, "||", counter2)
                         label_amazon.append(amazon_delta[counter2])
                         flag = 1
                 # this accounts for not in 13:30-21:30 so +1 day 1st hr
@@ -170,8 +167,8 @@ def timeNewsCorr(newsData, stockDatAmazon):
                         # if(temp2.date() == first_amazon2.date() and temp2.time() == first_amazon2.time()):
                         if temp2 == first_amazon2 and flag != 1:
                             amazon_delta_complete.append(amazon_delta[counter3])
-                            print("Found 2 ", news_date_var, "||+1 day", temp2, "||amazon: ", first_amazon2,
-                                  "label:", amazon_delta[counter3], "counter", counter, "||", counter3)
+                            # print("Found 2 ", news_date_var, "||+1 day", temp2, "||amazon: ", first_amazon2,
+                                #   "label:", amazon_delta[counter3], "counter", counter, "||", counter3)
                             label_amazon.append(amazon_delta[counter3])
                             flag = 1
 
@@ -190,22 +187,36 @@ def timeNewsCorr(newsData, stockDatAmazon):
                     # print("time", temp2.time(), first_amazon2.time())
                     if temp4.time() <= first_amazon3.time() <= temp6.time():
                         amazon_delta_complete.append(amazon_delta[counter4])
-                        print("Found 3 ", news_date_var, "||+1 day", temp4, "||amazon: ", first_amazon3,
-                              "label:", amazon_delta[counter4], "counter", counter, "||", counter4)
+                        # print("Found 3 ", news_date_var, "||+1 day", temp4, "||amazon: ", first_amazon3,
+                            #   "label:", amazon_delta[counter4], "counter", counter, "||", counter4)
                         label_amazon.append(amazon_delta[counter4])
     return label_amazon
+
+def writeFile(amazonData, appleData):
+    with open(newsData1) as csvfile:
+        rows = csv.reader(csvfile)
+        with open(label_file1, 'w', newline='') as f:
+            writer = csv.writer(f)
+            i = 0
+            for row in rows:
+                row.append(label_amazon[i])
+                row.append(label_apple[i])
+                i = i + 1
+                # print(row)
+                writer.writerow(row)
+
 print("part1: preprocess: write to txt ")
 # step 1
 # txt_filename =  r'C:\Users\babuvgiridar\OneDrive - Arizona State University\Asu\Year\Master\Spring 2020\Cse 573\Project\Project_preprocess\test.txt'
 txt_filename = basepath + "/test.txt"
 # write_file(txt_filename)
 
+print("part2: put in sql")
 # step 2
 # chart_filename = basepath + '/Data/CHARTS/AMAZON60.csv'
 create_file_csv = basepath + '/test1.csv'
 print("total1:", total_Column_step)
 # create_sql.div_hourly_data(create_file_csv, total_Column_step)
-print("part2 done")
 
 print("part3: calculate delta of hour")
 # Step 3
@@ -214,18 +225,17 @@ stockDataApple1 = basepath + '/Data/CHARTS/2APPLE60.csv'
 stockDataAmazon1 = basepath + '/Data/CHARTS/2AMAZON60.csv'
 label_file1 = basepath+'/test2.csv'
 
-label_amazon = timeNewsCorr(newsData1, stockDataApple1)
+# label_amazon = timeNewsCorr(newsData1, stockDataApple1)
 print("Apple\n")
-label_apple = timeNewsCorr(newsData1, stockDataApple1)
+# label_apple = timeNewsCorr(newsData1, stockDataApple1)
 
-with open(newsData1) as csvfile:
-    rows = csv.reader(csvfile)
-    with open(label_file1, 'w', newline='') as f:
-        writer = csv.writer(f)
-        i = 0
-        for row in rows:
-            row.append(label_amazon[i])
-            row.append(label_apple[i])
-            i = i + 1
-            print(row)
-            writer.writerow(row)
+# write to file
+# writeFile(label_amazon, label_apple)
+
+# Feature selection
+featureMatrix = basepath+'/featureMatrix.csv'
+# featureExtration(label_file1,featureMatrix)
+
+output = basepath+ '/featureExtration4.csv'
+resultNews = getAllSite2(featureMatrix, output)
+featureExtration4(featureMatrix, output, resultNews)
