@@ -1,7 +1,7 @@
-# Stock Prediction using Viral Tweets and News :chart_with_upwards_trend: 
+# Stock Prediction using Viral News :chart_with_upwards_trend: 
 Stock Exchange is a fierce and unpredictable battleground for investors because it is extremely volatile at any given time. Attempts to predict whether a stock price will be higher or lower than it is on a given day truly is a challenging task. This stems from the fact that volatility makes it difficult to apply simple time-series or regression techniques. Even so, the challenge of stock price prediction is very appealing because a little improvement can increase profits multifold. The paper demonstrates some state-of-art methods for stock price prediction ranging from early statistical analysis to recent Machine Learning and Artificial Intelligence domains.Then, the research plan, evaluation plan, and division of work that we will follow throughout the project are specified. Extensive research and advances in these fields have made it possible to predict stock prices very effectively.
 
-> :warning: For the install, execute instructions, screenshots and module specific functions look at the **README.md** files under each module.
+> :warning: For installation, execute instructions, screenshots and module specific functions look at the **README.md** files under each module.
 > This is a general **README** file with higher level details of the project.
 > Data(Amazon and Apple) hourly change data is provided to us by the Professor.
 > Preprocessing extracted from data provided are stored in Semantic_Web_Mining_Project/CODE/Preprocessing.
