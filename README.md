@@ -22,6 +22,7 @@ Stock Exchange is a fierce and unpredictable battleground for investors because 
 1)Logistic Regression - Logistic regression is a regression and predictive analysis to conduct when the dependent variable is dichotomous (binary).  
 
 2)Support Vector Machine - Support Vector Machine algorithm finds a hyperplane in an N-dimensional space (N — the number of features) that distinctly classifies the data points.
+
 3)Decision Tree - Decision Tree is supervised algorithm that expands its branches after every iteration into a tree like structure. At the end, the leaf nodes are the predictions of the model.
 
 4)Recurrent Neural Network (RNN) - RNN is deep learning model. They are especially powerful in use cases in which context is critical to predicting an outcome. they use feedback loops to process a sequence of data that informs the final output, which can also be a sequence of data . These feedback loops allow information to persist; the effect is often described as memory.
