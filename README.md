@@ -30,8 +30,12 @@ Stock Exchange is a fierce and unpredictable battleground for investors because 
 ### Preprocessing of the raw data 
 There are around 76000 rows in our dataset.
 We did preprocessing those raw data by Python and MySQL.
-News data preprocessing: First, we extract data we need, like time, website and text, from the News data. Then we import those into new table by MySQL, because those data are not ordered, we should organize our data through MySQL by time. After that, we can get clean data and order by time. 
-Stock Chart preprocessing: After we got new clean news data, we need combine them and price of two companies stocks. 
+First of all, we extract data we need, like time, website and text, from the News data. Then we import those into new table by MySQL, because those data are not ordered, we should organize our data through MySQL by time. After that, we can get clean data and order by time. 
+Secondly, we combine these news data and price of two companies stocks together.  In this step we took the time of open time-closing time for news and compare it with delta stock value.We used 1 hr and 4 hr data to compare the news with the stock prices. 
+Thirdly, we need set labels and calculate semantic value of each news. 
+Label is calculated by delta stock price as mentioned in step 2, 1 if delta is positive, otherwise -1. 
+We analyzed the sentiment of each news by pre processing the news into trigram, then feed them to textblob library, it calculated the polarity of each word set in trigram, the average polarity of word sets will be the final sentiment for each news. 
+News accuracy is decided by the number of correct post and  total post from each site with formula news_correct/total_news_from_ the site 
 
 
 ### Evaluations
