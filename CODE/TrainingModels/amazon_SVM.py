@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 
 
 # READING DATA AND EXTRACTING RELEVANT COLUMNS
-df = pd.read_csv('featurematrix.csv')
+df = pd.read_csv('featureMatrix(amazon and apple)_1hr_BOW.csv')
 df1 = df.loc[(df['Company Stocks'] == 1) | (df['Company Stocks'] == 3)]
 X = df1[['Semantic Analysis','AccuracySites']].values
 y = df1[['Amazon']].values
@@ -27,8 +27,8 @@ sns.countplot(x='Amazon',data = df1, palette = 'hls')
 
 
 #PLOTTING FEATURES AGAINST THE LABELS
-sns.set_style('whitegrid')
-sns.countplot(x='Amazon', hue='Semantic', data=df1)
+"""sns.set_style('whitegrid')
+sns.countplot(x='Amazon', hue='Semantic', data=df1)"""
 
 
 # PRINT THE PERCENTAGE OF NEGATIVES AND POSITIVES
@@ -44,12 +44,12 @@ X_train,X_test, y_train, y_test = train_test_split(X,y,test_size=0.3,random_stat
 min_max_scaler = preprocessing.MinMaxScaler()
 x_train_scaled = min_max_scaler.fit_transform(X_train)
 x_test_scaled = min_max_scaler.fit_transform(X_test)
-supvecmac = svm.NuSVC(gamma='scale',probability=True)
+supvecmac = svm.NuSVC(gamma='scale',probability=True,nu=0.01)
 supvecmac.fit(X, y)
 y_pred = supvecmac.predict(X_test)
 y_train_pred = supvecmac.predict(X_train)
 print('Training accuracy %s' % accuracy_score(y_train, y_train_pred))
-print('Testing F1 score: {}'.format(f1_score(y_train, y_train_pred, average='weighted')))
+print('Training F1 score: {}'.format(f1_score(y_train, y_train_pred, average='weighted')))
 print('Testing accuracy %s' % accuracy_score(y_test, y_pred))
 print('Testing F1 score: {}'.format(f1_score(y_test, y_pred, average='weighted')))
 
