@@ -1,0 +1,75 @@
+
+{% extends 'main.html' %}
+
+
+{% block body %}
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="GeeksLabs">
+    <meta name="keyword" content="Creative, Dashboard, Admin, Template, Theme, Bootstrap, Responsive, Retina, Minimal">
+    <link rel="shortcut icon" href="img/favicon.png">
+
+    <title>Stock</title>
+
+    <!-- Bootstrap CSS -->    
+    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <!-- bootstrap theme -->                                                     
+    <link href="{{url_for('static', filename='css/bootstrap-theme.css')}}" rel="stylesheet">
+    <!--external css-->
+    <!-- font icon -->
+    <link href="{{url_for('static', filename='css/elegant-icons-style.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='css/font-awesome.css')}}" rel="stylesheet" />
+    <!-- Custom styles -->
+    <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/style-responsive.css"')}}"rel="stylesheet" />
+
+  </head>
+
+  <body class="login-img3-body">
+
+<!-- container section start -->
+  <section id="container" class="" align="middle">
+      <!--header start-->
+      <header class="header dark-bg">
+                 <!--logo start-->
+            <a class="logo">Stock <span class="lite">Prediction</span></a>
+            <!--logo end-->
+
+              </header>      
+      <!--header end-->
+
+      
+     
+  </section>
+  <!-- container section end -->
+
+
+
+
+
+    
+    <div class="container">
+
+      <form class="login-form" method="POST" action="{{ url_for('root') }}">        
+        <div class="login-wrap">
+            <p class="login-img"><i class="icon_lock_alt"></i></p>
+            <div class="input-group">
+              <span class="input-group-addon"><i class="icon_profile"></i></span>
+              <input type="text" class="form-control" name="company_data" placeholder="Company Data" autofocus>
+            </div>
+            
+            
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+            
+        </div>
+      </form>
+
+    </div>
+
+
+  </body>
+{% endblock %}
